@@ -271,17 +271,23 @@ function throw_format(Throwable $throw)
 }
 
 /**
- * @param SimplesRunTimeError $error
+ * @param Throwable $error
  * @return array
  */
-function error_format(SimplesRunTimeError $error): array
+function error_format(Throwable $error): array
 {
-    return ['error' => [
-        'fail' => get_class($error),
-        'details' => $error->getDetails(),
-        'context' => $error->getContext(),
-        'trace' => App::beautifulTrace($error->getTrace())
-    ]];
+    $trace = $error->getTraceAsString();
+    //$trace = App::beautifulTrace($error->getTrace());
+    return [
+        'error' => [
+            'fail' => get_class($error),
+            'details' => $error instanceof SimplesRunTimeError ? $error->getDetails() : [],
+            // 'trace' => array_slice($trace, 1, count($trace) - App::options('avoid'))
+            'trace' => array_map(function ($value) {
+                return str_replace('/', '\\', str_replace(App::options('root'), '', $value));
+            }, explode(PHP_EOL, $trace))
+        ]
+    ];
 }
 
 /**

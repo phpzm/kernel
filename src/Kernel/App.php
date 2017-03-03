@@ -68,6 +68,7 @@ class App
                 'type' => 'html',
                 'separator' => '@',
                 'filter' => '~>',
+                'avoid' => 7,
                 'strict' => false
             ];
             self::$OPTIONS = array_merge($default, $options);
@@ -137,13 +138,10 @@ class App
     }
 
     /**
-     * @SuppressWarnings("BooleanArgumentFlag")
-     *
      * @param array $trace
-     * @param bool $filter
      * @return array
      */
-    public static function beautifulTrace(array $trace, bool $filter = true): array
+    public static function beautifulTrace(array $trace): array
     {
         $stack = [];
         foreach ($trace as $value) {
@@ -153,9 +151,6 @@ class App
             }
             $class = off($value, 'class');
             $function = off($value, 'function');
-            if ($filter && strpos($class, 'Simples\\Core\\Kernel') === 0) {
-                continue;
-            }
             if ($class && $function) {
                 $trace = $class . App::options('separator') . $function;
             }
