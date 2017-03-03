@@ -1,0 +1,38 @@
+{
+  "name": "phpzm/kernel",
+  "description": "Simples Kernel package",
+  "minimum-stability": "dev",
+  "keywords": [
+    "php",
+    "framework",
+    "api",
+    "simples"
+  ],
+  "homepage": "https://github.com/phpzm/kernel",
+  "license": "MIT",
+  "version": "1.0.0",
+  "type": "package",
+  "authors": [
+    {
+      "name": "William",
+      "email": "wilcorrea@gmail.com"
+    },
+    {
+      "name": "Ezio",
+      "email": "ezioadsr@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Simples\\Error\\": "src/Error/",
+      "Simples\\Kernel\\": "src/Kernel/",
+      "Simples\\Unit\\": "src/Unit/"
+    },
+    "files": [
+      "bootstrap/index.php"
+    ]
+  }
+}
