@@ -20,7 +20,37 @@ class ${NAME} extends DataMapper
 
         $this->instance('${table}', '${primaryKey}');
 
-        $this->field('${primaryKey}')->int();
-        $this->field('${description}')->string()->required();
+        $this->add('${primaryKey}')->integer();
+        $this->add('${description}')->string()->required();
+    }
+
+    /**
+    * @return array
+    */
+    public function getDefaultsCreate(): array
+    {
+        /*return [
+            '${{field1}}' => 'somethingvalue',
+            '${{field2}}' => somethingvalue,
+            '${{field3}}' => somethingvalue
+            [, ...]
+        ];*/
+    }
+
+    /**
+    * @param string $action
+    * @param Record $record
+    * @param Record|null $previous
+    * @return bool
+    */
+    public function before(string $action, Record $record, Record $previous = null): bool
+    {
+        /*if ($record->get('${{field}}') === 'something') {
+            $record->set('${{field1}}', 'something1');
+            $record->set('${{field2}}', somethingvalue);
+            $record->set('${{field3andbeyond}}', somethingvalueandbeyond);
+        }
+
+        return parent::before($action, $record, $previous); */
     }
 }
