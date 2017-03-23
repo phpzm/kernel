@@ -1,5 +1,6 @@
 <?php
 
+// show all errors
 error_reporting(E_ALL);
 
 // system settings
@@ -9,18 +10,18 @@ ini_set('track_errors', env('ERRORS_DISPLAY', 'Off'));
 ini_set('html_errors', env('ERRORS_DISPLAY', 'Off'));
 
 // native types
-define('TYPE_BOOLEAN', 'boolean');
-define('TYPE_INTEGER', 'integer');
-define('TYPE_FLOAT', 'float');
-define('TYPE_STRING', 'string');
-define('TYPE_ARRAY', 'array');
-define('TYPE_OBJECT', 'object');
-define('TYPE_RESOURCE', 'resource');
-define('TYPE_NULL', 'null');
-define('TYPE_UNKNOWN_TYPE', 'unknown type');
+const TYPE_BOOLEAN = 'boolean';
+const TYPE_INTEGER = 'integer';
+const TYPE_FLOAT = 'float';
+const TYPE_STRING = 'string';
+const TYPE_ARRAY = 'array';
+const TYPE_OBJECT = 'object';
+const TYPE_RESOURCE = 'resource';
+const TYPE_NULL = 'null';
+const TYPE_UNKNOWN_TYPE = 'unknown type';
 
 // custom types
-define('TYPE_DATE', 'date');
+const TYPE_DATE = 'date';
 
 // used to compose path do generator
 define('TEMPLATE_DIR', 'kernel/resources/templates');
