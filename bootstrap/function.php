@@ -413,3 +413,14 @@ function camelize(string $dashes, $first = true): string
     $camelCase[0] = $case($camelCase[0]);
     return (string)$camelCase;
 }
+
+/**
+ * Extract the short name of class
+ *   Ex.: (Namespace\Class) => Class
+ * @param string $class
+ * @return string
+ */
+function get_class_short_name (string $class)
+{
+    return basename(str_replace('\\', '/', $class));
+}
