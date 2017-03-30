@@ -137,25 +137,18 @@ function parse($value): string
 }
 
 /**
- * @SuppressWarnings("BooleanArgumentFlag")
- * @param mixed $value
- * @param mixed $default (false)
+ * @param array ...$arguments
  * @return mixed
+ * @throws SimplesRunTimeError
  */
-function iif($value, $default = false)
+function coalesce(...$arguments)
 {
-    return !$value ? $default : $value;
-}
-
-/**
- * @SuppressWarnings("BooleanArgumentFlag")
- * @param mixed $value
- * @param mixed $default (false)
- * @return mixed
- */
-function of($value, $default = false)
-{
-    return is_null($value) ? $default : $value;
+    foreach ($arguments as $argument) {
+        if (!is_null($argument)) {
+            return $argument;
+        }
+    }
+    throw new SimplesRunTimeError("Can't resolve coalesce options", $arguments);
 }
 
 /**
