@@ -171,7 +171,6 @@ class Container
      * @param $parameters
      * @param bool $labels
      * @return array
-     * @SuppressWarnings("BooleanArgumentFlag")
      */
     public function resolveMethodParameters($instance, $method, $parameters, $labels = false)
     {
@@ -189,7 +188,6 @@ class Container
      * @param $parameters
      * @param bool $labels
      * @return array
-     * @SuppressWarnings("BooleanArgumentFlag")
      */
     public function resolveFunctionParameters($callable, $parameters, $labels = false)
     {
@@ -208,7 +206,6 @@ class Container
      * @param bool $labels
      * @return array
      *
-     * @SuppressWarnings("BooleanArgumentFlag")
      */
     private function resolveParameters($parameters, $data, $labels = false)
     {
