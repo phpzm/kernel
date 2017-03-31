@@ -178,12 +178,13 @@ function off($value, $property = null, $default = null)
 }
 
 /**
+ * @param array ...$arguments
  * @SuppressWarnings("ExitExpression")
  */
-function stop()
+function stop(...$arguments)
 {
     ob_start();
-    echo json_encode(func_get_args());
+    echo json_encode($arguments);
     $contents = ob_get_contents();
     ob_end_clean();
     out($contents);
