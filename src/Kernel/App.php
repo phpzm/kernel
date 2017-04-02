@@ -3,6 +3,7 @@
 namespace Simples\Kernel;
 
 use Simples\Error\SimplesRunTimeError;
+use Simples\Helper\File;
 
 /**
  * Class App
@@ -165,12 +166,27 @@ class App
      * @param bool $logging (null)
      * @return bool|null
      */
-    public static function log(bool $logging = null)
+    public static function logging(bool $logging = null)
     {
         if (!is_null($logging)) {
             self::$logging = $logging;
         }
         return self::$logging;
+    }
+
+    /**
+     * Create a file with data to be analysed
+     *
+     * @param array ...$data
+     * @return int
+     */
+    public static function log(...$data)
+    {
+        $filename = static::options('root') . '/storage/log/access';
+        if (is_array($data) && count($data) === 1) {
+            $data = $data = 0;
+        }
+        return File::write($filename, $data, true);
     }
 
     /**

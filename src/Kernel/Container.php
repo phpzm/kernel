@@ -2,6 +2,7 @@
 
 namespace Simples\Kernel;
 
+use Simples\Error\NotFoundExceptionInterface;
 use Simples\Error\SimplesRunTimeError;
 use ReflectionClass;
 use ReflectionMethod;
@@ -40,7 +41,7 @@ class Container
      *
      * @return Container Current Container container instance
      */
-    public static function box()
+    public static function instance()
     {
         // if there is not a instance yet, create a new one
         if (null === self::$instance) {
@@ -57,14 +58,13 @@ class Container
      * @param string $alias Identifier of the entry to look for.
      *
      * @throws NotFoundExceptionInterface  No entry was found for this identifier.
-     * @throws ContainerExceptionInterface Error while retrieving the entry.
      *
      * @return mixed Entry.
      */
     public function get($alias)
     {
         if (!$this->has($alias)) {
-
+            throw new NotFoundExceptionInterface();
         }
         return $this->bindings[$alias];
     }
@@ -213,13 +213,16 @@ class Container
 
         /** @var ReflectionParameter $reflectionParameter */
         foreach ($parameters as $reflectionParameter) {
-
+            if (isset($data[$reflectionParameter->getName()])) {
+                $parametersToPass[] = $this->parseParameter($reflectionParameter, $data, $labels);
+                continue;
+            }
             /** @noinspection PhpAssignmentInConditionInspection */
             if ($parameterClassName = $this->extractClassName($reflectionParameter)) {
                 $parametersToPass[] = self::make($parameterClassName);
                 continue;
             }
-            if (isset($data[$reflectionParameter->getName()]) || count($data)) {
+            if (count($data)) {
                 $parametersToPass[] = $this->parseParameter($reflectionParameter, $data, $labels);
                 continue;
             }

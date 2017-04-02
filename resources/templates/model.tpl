@@ -18,7 +18,7 @@ class ${NAME} extends DataMapper
     {
         parent::__construct();
 
-        $this->instance('${table}', '${primaryKey}');
+        $this->configure('${table}', '${primaryKey}');
 
         $this->add('${primaryKey}')->integer();
         $this->add('${description}')->string()->required();

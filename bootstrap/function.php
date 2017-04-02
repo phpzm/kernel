@@ -114,21 +114,18 @@ function out($value)
 function parse($value): string
 {
     switch (gettype($value)) {
-        case TYPE_BOOLEAN: {
+        case TYPE_BOOLEAN:
             return $value ? 'true' : 'false';
             break;
-        }
         case TYPE_INTEGER:
         case TYPE_FLOAT:
-        case TYPE_STRING: {
+        case TYPE_STRING:
             return trim($value);
             break;
-        }
         case TYPE_ARRAY:
         case TYPE_OBJECT:
-        case TYPE_RESOURCE: {
+        case TYPE_RESOURCE:
             return json_encode($value);
-        }
         // case TYPE_NULL:
         // case TYPE_UNKNOWN_TYPE:
         default:
@@ -210,7 +207,6 @@ function headerify($name)
 }
 
 /**
- * @SuppressWarnings("BooleanArgumentFlag")
  * @param string $from
  * @param string $to
  * @param string $subject
@@ -227,7 +223,6 @@ function str_replace_first($from, $to, $subject, $quote = false)
 }
 
 /**
- * @SuppressWarnings("BooleanArgumentFlag")
  * @param bool $brackets
  * @return string
  */
@@ -383,9 +378,9 @@ function argv(array $argv): array
  */
 function dasherize(string $camelCase): string
 {
-    $dashes = preg_replace_callback('/([A-Z])/',
-        create_function('$matches', 'return \'-\' . strtolower($matches[1]);'), $camelCase
-    );
+    $args = '$matches';
+    $code = 'return \'-\' . strtolower($matches[1]);';
+    $dashes = preg_replace_callback('/([A-Z])/', create_function($args, $code), $camelCase);
     return substr($dashes, 1);
 }
 
@@ -393,13 +388,12 @@ function dasherize(string $camelCase): string
  * @param string $dashes
  * @param bool $first
  * @return mixed
- * @SuppressWarnings("BooleanArgumentFlag")
  */
 function camelize(string $dashes, $first = true): string
 {
-    $camelCase = preg_replace_callback('/-(.)/',
-        create_function('$matches', 'return strtoupper($matches[1]);'), $dashes
-    );
+    $args = '$matches';
+    $code = 'return strtoupper($matches[1]);';
+    $camelCase = preg_replace_callback('/-(.)/', create_function($args, $code), $dashes);
     $case = 'strtoupper';
     if (!$first) {
         $case = 'strtolower';
@@ -414,7 +408,19 @@ function camelize(string $dashes, $first = true): string
  * @param string $class
  * @return string
  */
-function get_class_short_name (string $class)
+function get_class_short_name(string $class)
 {
     return basename(str_replace('\\', '/', $class));
+}
+
+/**
+ * @param $code
+ * @param $message
+ * @param $file
+ * @param $line
+ * @throws ErrorException
+ */
+function error_handler($code, $message, $file, $line)
+{
+    throw new ErrorException($message, $code, 1, $file, $line);
 }
