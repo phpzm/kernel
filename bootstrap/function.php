@@ -265,16 +265,12 @@ function throw_format(Throwable $throw)
  */
 function error_format(Throwable $error): array
 {
-    $trace = $error->getTraceAsString();
-    //$trace = App::beautifulTrace($error->getTrace());
+    $trace = App::beautifulTrace($error->getTrace());
     return [
         'error' => [
             'fail' => get_class($error),
             'details' => $error instanceof SimplesRunTimeError ? $error->getDetails() : [],
-            // 'trace' => array_slice($trace, 1, count($trace) - App::options('avoid'))
-            'trace' => array_map(function ($value) {
-                return str_replace('/', '\\', str_replace(App::options('root'), '', $value));
-            }, explode(PHP_EOL, $trace))
+            'trace' => $trace
         ]
     ];
 }

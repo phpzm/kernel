@@ -2,9 +2,11 @@
 
 namespace Simples\Kernel;
 
+use Simples\Helper\JSON;
+
 /**
  * Class Wrapper
- * @package Simples\Route
+ * @package Simples\Kernel
  */
 abstract class Wrapper
 {
@@ -14,47 +16,51 @@ abstract class Wrapper
     private static $messages = [];
 
     /**
-     * @param $message
+     * @param string $message
+     * @param bool $trace (false)
      */
-    public static function warning($message)
+    public static function warning($message, bool $trace = false)
     {
-        self::message('warning', $message);
+        self::message('warning', $message, $trace);
     }
 
     /**
-     * @param $message
+     * @param string $message
+     * @param bool $trace (false)
      */
-    public static function info($message)
+    public static function info($message, bool $trace = false)
     {
-        self::message('info', $message);
+        self::message('info', $message, $trace);
     }
 
     /**
-     * @param $message
+     * @param string $message
+     * @param bool $trace (false)
      */
-    public static function buffer($message)
+    public static function buffer($message, bool $trace = false)
     {
-        self::message('buffer', $message);
+        self::message('buffer', $message, $trace);
     }
 
     /**
-     * @param $log
+     * @param array ...$data
      */
-    public static function log($log)
+    public static function log(...$data)
     {
-        self::message('log', $log);
+        self::message('log', $data, true);
     }
 
     /**
-     * @param $type
-     * @param $message
+     * @param string $type
+     * @param string $message
+     * @param bool $trace
      */
-    public static function message($type, $message)
+    public static function message($type, $message, bool $trace = false)
     {
         self::$messages[] = [
             'type' => $type,
-            'message' => $message,
-            'trace' => self::trace()
+            'message' => gettype($message) === TYPE_STRING ? $message : JSON::encode($message),
+            'trace' => $trace ? self::trace() : false
         ];
     }
 

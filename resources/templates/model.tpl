@@ -30,9 +30,9 @@ class ${NAME} extends DataMapper
     public function getDefaultsCreate(): array
     {
         /*return [
-            '${{field1}}' => 'somethingvalue',
-            '${{field2}}' => somethingvalue,
-            '${{field3}}' => somethingvalue
+            '${{field1}}' => 'value',
+            '${{field2}}' => value,
+            '${{field3}}' => value
             [, ...]
         ];*/
     }
@@ -45,10 +45,8 @@ class ${NAME} extends DataMapper
     */
     public function before(string $action, Record $record, Record $previous = null): bool
     {
-        /*if ($record->get('${{field}}') === 'something') {
-            $record->set('${{field1}}', 'something1');
-            $record->set('${{field2}}', somethingvalue);
-            $record->set('${{field3andbeyond}}', somethingvalueandbeyond);
+        /*if ($record->get('${{field}}') === 'value') {
+            $record->set('${{field1}}', 'value');
         }
 
         return parent::before($action, $record, $previous); */

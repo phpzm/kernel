@@ -184,7 +184,7 @@ class App
     {
         $filename = static::options('root') . '/storage/log/access';
         if (is_array($data) && count($data) === 1) {
-            $data = $data = 0;
+            $data = $data[0];
         }
         return File::write($filename, $data, true);
     }
