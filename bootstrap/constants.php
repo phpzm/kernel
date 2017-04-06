@@ -17,6 +17,7 @@ const TYPE_DATE = 'date';
 const __AND__ = ' AND ';
 const __OR__ = ' OR ';
 const __COMMA__ = ', ';
+const __NULL__ = '__NULL__';
 
 // used to compose path do generator
 define('TEMPLATE_DIR', 'kernel/resources/templates');
