@@ -1,0 +1,13 @@
+# directories
+/.idea
+/.dirty
+/.docs
+/.dev
+/vendor
+#/scripts
+# files
+*.cache
+sami.phar
+
+# reverse
+!*.gitkeep
