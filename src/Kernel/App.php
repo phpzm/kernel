@@ -62,7 +62,8 @@ class App
             $default = [
                 'root' => dirname(__DIR__, 5),
                 'lang' => [
-                    'default' => 'en', 'fallback' => 'en'
+                    'default' => 'en',
+                    'fallback' => 'en'
                 ],
                 'labels' => true,
                 'headers' => [],
@@ -116,7 +117,7 @@ class App
             $filename = path(true, "config/{$name}.php");
             if (file_exists($filename)) {
                 /** @noinspection PhpIncludeInspection */
-                $config = (object) require $filename;
+                $config = (object)require $filename;
                 self::$CONFIGS[$name] = $config;
             }
         }
@@ -198,10 +199,10 @@ class App
      */
     public function http($output = true)
     {
-        if (class_exists('\\Simples\\Http\\Kernel\\App')) {
-            return \Simples\Http\Kernel\App::handler($output);
+        if (!class_exists('\\Simples\\Http\\Kernel\\App')) {
+            throw new SimplesRunTimeError("App can't handler Http without the package `phpzm/http`");
         }
-        throw new SimplesRunTimeError("App can't handler Http without the package `phpzm/http`");
+        return \Simples\Http\Kernel\App::handler($output);
     }
 
     /**
@@ -212,9 +213,9 @@ class App
      */
     public function cli(array $service)
     {
-        if (class_exists('\\Simples\\Console\\Kernel\\App')) {
-            \Simples\Console\Kernel\App::handler($service);
+        if (!class_exists('\\Simples\\Console\\Kernel\\App')) {
+            throw new SimplesRunTimeError("App can't handler Console without the package `phpzm/console`");
         }
-        throw new SimplesRunTimeError("App can't handler Console without the package `phpzm/console`");
+        \Simples\Console\Kernel\App::handler($service);
     }
 }
