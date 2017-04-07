@@ -14,6 +14,7 @@ const TYPE_UNKNOWN_TYPE = 'unknown type';
 // custom types
 const TYPE_DATE = 'date';
 
+// context operators
 const __AND__ = ' AND ';
 const __OR__ = ' OR ';
 const __COMMA__ = ', ';
