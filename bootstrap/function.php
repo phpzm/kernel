@@ -69,16 +69,24 @@ function path($root)
     if (is_bool($root)) {
         array_shift($args);
         if ($root) {
-            $dir = \Simples\Kernel\App::options('root');
-            if (!$dir) {
-                $dir = dirname(__DIR__, 4);
-            }
-            $peaces = [$dir];
+            $peaces = [root()];
         }
     }
     $path = array_merge($peaces, $args);
 
     return implode(DIRECTORY_SEPARATOR, $path);
+}
+
+/**
+ * @return mixed|string
+ */
+function root()
+{
+    $dir = \Simples\Kernel\App::options('root');
+    if (!$dir) {
+        $dir = dirname(__DIR__, 4);
+    }
+    return $dir;
 }
 
 /**
@@ -419,4 +427,14 @@ function get_class_short_name(string $class)
 function error_handler($code, $message, $file, $line)
 {
     throw new ErrorException($message, $code, 1, $file, $line);
+}
+
+/**
+ * @param mixed $value
+ * @param string $type
+ * @return bool
+ */
+function type($value, string $type)
+{
+    return gettype($value) === $type;
 }
