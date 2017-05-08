@@ -52,14 +52,14 @@ abstract class Wrapper
 
     /**
      * @param string $type
-     * @param string $message
+     * @param mixed $message
      * @param bool $trace
      */
     public static function message($type, $message, bool $trace = false)
     {
         self::$messages[] = [
             'type' => $type,
-            'message' => gettype($message) === TYPE_STRING ? $message : JSON::encode($message),
+            'message' => $message,
             'trace' => $trace ? self::trace() : false
         ];
     }

@@ -137,7 +137,7 @@ function parse($value): string
         // case TYPE_NULL:
         // case TYPE_UNKNOWN_TYPE:
         default:
-            return null;
+            return '';
     }
 }
 
@@ -281,6 +281,23 @@ function error_format(Throwable $error): array
             'trace' => $trace
         ]
     ];
+}
+
+/**
+ * @param string $class
+ * @return bool
+ */
+function is_last_caller(string $class): bool
+{
+    $debug_backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3);
+    if (!is_array($debug_backtrace)) {
+        return false;
+    }
+    $trace = array_pop($debug_backtrace);
+    if (isset($trace['class']) && $trace['class'] === $class) {
+        return true;
+    }
+    return false;
 }
 
 /**

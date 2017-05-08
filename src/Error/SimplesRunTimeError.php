@@ -13,7 +13,7 @@ class SimplesRunTimeError extends Exception
     /**
      * @var int
      */
-    protected $status = 500;
+    protected $status = 529;
 
     /**
      * @var array

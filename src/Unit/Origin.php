@@ -2,21 +2,28 @@
 
 namespace Simples\Unit;
 
+use JsonSerializable;
+
 /**
  * Class Origin
  * @package Simples\Core\Unit
  */
-class Origin
+abstract class Origin implements JsonSerializable
 {
     /**
-     * @return string
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
      */
-    public function __toString()
+    public function jsonSerialize()
     {
-        $properties = [];
-        foreach ($this as $key => $value) {
-            $properties = [$key => $value];
-        }
-        return json_encode($properties);
+        return $this->expose();
     }
+
+    /**
+     * @return mixed
+     */
+    protected abstract function expose();
 }

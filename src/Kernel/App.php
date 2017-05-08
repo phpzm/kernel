@@ -154,7 +154,7 @@ class App
             $class = off($value, 'class');
             $function = off($value, 'function');
             if ($class && $function) {
-                $trace = $class . App::options('separator') . $function;
+                $trace = str_replace('\\', '/', $class) . App::options('separator') . $function;
             }
             $stack[] = $trace;
         }
