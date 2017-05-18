@@ -2,6 +2,7 @@
 
 namespace Simples\Kernel;
 
+use Simples\Error\SimplesAlreadyRegisteredError;
 use Simples\Error\SimplesRunTimeError;
 use Simples\Helper\File;
 
@@ -31,6 +32,12 @@ class App
      * @var boolean
      */
     private static $logging;
+
+    /**
+     * Pipe of middlewares to be solved
+     * @var array
+     */
+    private $pipe = [];
 
     /**
      * App constructor
@@ -191,6 +198,27 @@ class App
     }
 
     /**
+     * Add middlewares to pipe
+     *
+     * @param Middleware $middleware
+     * @return App
+     * @throws SimplesAlreadyRegisteredError
+     */
+    public function pipe(Middleware $middleware): App
+    {
+        $alias = $middleware->alias();
+        $filter = array_filter($this->pipe, function ($middleWare) use ($alias) {
+            return $middleWare->alias() === $alias;
+        });
+        if (count($filter)) {
+            throw new SimplesAlreadyRegisteredError("The middleware `{$alias}` is already registered");
+        }
+        $this->pipe[] = $middleware;
+
+        return $this;
+    }
+
+    /**
      * Used to catch http requests and handle response to their
      *
      * @param bool $output (true) Define if the method will generate one output with the response
@@ -202,7 +230,7 @@ class App
         if (!class_exists('\\Simples\\Http\\Kernel\\App')) {
             throw new SimplesRunTimeError("App can't handler Http without the package `phpzm/http`");
         }
-        return \Simples\Http\Kernel\App::handler($output);
+        return \Simples\Http\Kernel\App::handle($this->pipe, $output);
     }
 
     /**
@@ -216,6 +244,6 @@ class App
         if (!class_exists('\\Simples\\Console\\Kernel\\App')) {
             throw new SimplesRunTimeError("App can't handler Console without the package `phpzm/console`");
         }
-        \Simples\Console\Kernel\App::handler($service);
+        \Simples\Console\Kernel\App::handle($service);
     }
 }
