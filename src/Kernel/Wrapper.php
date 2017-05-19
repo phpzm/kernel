@@ -2,8 +2,6 @@
 
 namespace Simples\Kernel;
 
-use Simples\Helper\JSON;
-
 /**
  * Class Wrapper
  * @package Simples\Kernel

@@ -17,14 +17,14 @@ class App
      *
      * @var array
      */
-    private static $CONFIGS = [];
+    private static $configs = [];
 
     /**
      * Options of App behavior
      *
      * @var array
      */
-    private static $OPTIONS;
+    private static $options;
 
     /**
      * Defines o log level of App
@@ -65,7 +65,7 @@ class App
      */
     private static function start(array $options = [])
     {
-        if (!self::$OPTIONS) {
+        if (!self::$options) {
             $default = [
                 'root' => dirname(__DIR__, 5),
                 'lang' => [
@@ -80,9 +80,9 @@ class App
                 'avoid' => 7,
                 'strict' => false
             ];
-            self::$OPTIONS = array_merge($default, $options);
+            self::$options = array_merge($default, $options);
         }
-        return self::$OPTIONS;
+        return self::$options;
     }
 
     /**
@@ -97,11 +97,11 @@ class App
         self::start();
         if ($key) {
             if (!$value) {
-                return self::$OPTIONS[$key] ?? null;
+                return self::$options[$key] ?? null;
             }
-            self::$OPTIONS[$key] = $value;
+            self::$options[$key] = $value;
         }
-        return self::$OPTIONS;
+        return self::$options;
     }
 
     /**
@@ -117,15 +117,15 @@ class App
         array_shift($peaces);
 
         $config = null;
-        if (isset(self::$CONFIGS[$name])) {
-            $config = self::$CONFIGS[$name];
+        if (isset(self::$configs[$name])) {
+            $config = self::$configs[$name];
         }
         if (!$config) {
             $filename = path(true, "config/{$name}.php");
             if (file_exists($filename)) {
                 /** @noinspection PhpIncludeInspection */
                 $config = (object)require $filename;
-                self::$CONFIGS[$name] = $config;
+                self::$configs[$name] = $config;
             }
         }
         if (count($peaces) === 0) {
