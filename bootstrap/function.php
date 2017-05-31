@@ -95,7 +95,7 @@ function root()
  */
 function storage($path)
 {
-    return path(true, 'storage', $path);
+    return path(true, config('app.storage.root'), $path);
 }
 
 /**
@@ -104,7 +104,7 @@ function storage($path)
  */
 function resources($path)
 {
-    return path(true, 'app/resources', $path);
+    return path(true, config('app.resources.root'), $path);
 }
 
 /**
@@ -153,6 +153,7 @@ function coalesce(...$arguments)
             return $argument;
         }
     }
+    // TODO: use locale
     throw new SimplesRunTimeError("Can't resolve coalesce options", $arguments);
 }
 
