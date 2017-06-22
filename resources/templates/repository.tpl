@@ -3,13 +3,13 @@
 namespace ${NAMESPACE}\Repository;
 
 use ${NAMESPACE}\Model\${NAME};
-use Simples\Model\Repository\ApiRepository;
+use Simples\Model\Repository\ModelRepository;
 
 /**
  * Class ${NAME}Repository
  * @package ${NAMESPACE}\Repository
  */
-class ${NAME}Repository extends ApiRepository
+class ${NAME}Repository extends ModelRepository
 {
     /**
      * @var ${NAME}
