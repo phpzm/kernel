@@ -243,14 +243,19 @@ class Container
     private function parseParameter(ReflectionParameter $reflectionParameter, $data, $labels)
     {
         $parameter = null;
-        if ($labels && isset($data[$reflectionParameter->getName()])) {
-            $parameter = $data[$reflectionParameter->getName()];
-            unset($data[$reflectionParameter->getName()]);
+        $name = $reflectionParameter->getName();
+        $default = $reflectionParameter->getDefaultValue();
+        if ($labels && isset($data[$name])) {
+            $parameter = $data[$name];
+            unset($data[$name]);
         }
         if (!$parameter && isset($data[0])) {
             $parameter = $data[0];
             array_shift($data);
             reset($data);
+        }
+        if (!$parameter && isset($default)) {
+            $parameter = $default;
         }
         return $parameter;
     }
