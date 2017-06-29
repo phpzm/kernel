@@ -236,15 +236,18 @@ class Container
      * Configure the beste resource to each parameter of one method or function
      *
      * @param ReflectionParameter $reflectionParameter
-     * @param $data
-     * @param $labels
-     * @return null
+     * @param array $data
+     * @param bool $labels
+     * @return mixed
      */
-    private function parseParameter(ReflectionParameter $reflectionParameter, $data, $labels)
+    private function parseParameter(ReflectionParameter $reflectionParameter, &$data, $labels)
     {
         $parameter = null;
         $name = $reflectionParameter->getName();
-        $default = $reflectionParameter->getDefaultValue();
+        $default = null;
+        if ($reflectionParameter->isOptional()) {
+            $default = $reflectionParameter->getDefaultValue();
+        }
         if ($labels && isset($data[$name])) {
             $parameter = $data[$name];
             unset($data[$name]);
