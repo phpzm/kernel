@@ -24,7 +24,7 @@ class App
      *
      * @var array
      */
-    private static $options;
+    private static $options = [];
 
     /**
      * Defines o log level of App
