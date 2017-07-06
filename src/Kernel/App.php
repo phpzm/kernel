@@ -56,16 +56,18 @@ class App
      */
     public function __construct($options)
     {
-        static::start($options);
+        static::setup($options);
     }
 
     /**
+     * Setup the options to App settings
+     *
      * @param array $options
      * @return array
      */
-    private static function start(array $options = [])
+    private static function setup(array $options = null): array
     {
-        if (!self::$options) {
+        if ($options) {
             $default = [
                 'root' => dirname(__DIR__, 5),
                 'lang' => [
@@ -80,9 +82,9 @@ class App
                 'avoid' => 7,
                 'strict' => false
             ];
-            self::$options = array_merge($default, $options);
+            static::$options = array_merge($default, $options);
         }
-        return self::$options;
+        return static::$options;
     }
 
     /**
@@ -94,14 +96,16 @@ class App
      */
     public static function options($key = null, $value = null)
     {
-        self::start();
-        if ($key) {
-            if (!$value) {
-                return self::$options[$key] ?? null;
-            }
-            self::$options[$key] = $value;
+        $options = static::setup();
+        if (!$key) {
+            return $options;
         }
-        return self::$options;
+        if (!$value) {
+            return $options[$key] ?? null;
+        }
+        static::$options[$key] = $value;
+
+        return static::$options;
     }
 
     /**
@@ -117,15 +121,15 @@ class App
         array_shift($peaces);
 
         $config = null;
-        if (isset(self::$configs[$name])) {
-            $config = self::$configs[$name];
+        if (isset(static::$configs[$name])) {
+            $config = static::$configs[$name];
         }
         if (!$config) {
             $filename = path(true, "config/{$name}.php");
             if (file_exists($filename)) {
                 /** @noinspection PhpIncludeInspection */
                 $config = (object)require $filename;
-                self::$configs[$name] = $config;
+                static::$configs[$name] = $config;
             }
         }
         if (count($peaces) === 0) {
@@ -177,9 +181,9 @@ class App
     public static function logging(bool $logging = null)
     {
         if (!is_null($logging)) {
-            self::$logging = $logging;
+            static::$logging = $logging;
         }
-        return self::$logging;
+        return static::$logging;
     }
 
     /**
@@ -198,22 +202,20 @@ class App
     }
 
     /**
-     * Add middlewares to pipe
+     * Add middleware's to pipe
      *
      * @param Middleware $middleware
+     * @param string $alias
      * @return App
      * @throws SimplesAlreadyRegisteredError
      */
-    public function pipe(Middleware $middleware): App
+    public function pipe(Middleware $middleware, string $alias = ''): App
     {
-        $alias = $middleware->alias();
-        $filter = array_filter($this->pipe, function ($middleWare) use ($alias) {
-            return $middleWare->alias() === $alias;
-        });
-        if (count($filter)) {
+        $alias = $alias ? $alias : $middleware->alias();
+        if (isset($this->pipe[$alias])) {
             throw new SimplesAlreadyRegisteredError("The middleware `{$alias}` is already registered");
         }
-        $this->pipe[] = $middleware;
+        $this->pipe[$alias] = $middleware;
 
         return $this;
     }
