@@ -416,12 +416,11 @@ function camelize(string $dashes, $first = true): string
     $args = '$matches';
     $code = 'return strtoupper($matches[1]);';
     $camelCase = preg_replace_callback('/-(.)/', create_function($args, $code), $dashes);
-    $case = 'strtoupper';
+    $case = 'ucfirst';
     if (!$first) {
-        $case = 'strtolower';
+        $case = 'lcfirst';
     }
-    $camelCase[0] = $case($camelCase[0]);
-    return (string)$camelCase;
+    return (string)$case($camelCase);
 }
 
 /**
