@@ -2,12 +2,12 @@
 
 namespace Simples\Kernel;
 
+use ReflectionClass;
+use ReflectionFunction;
+use ReflectionMethod;
+use ReflectionParameter;
 use Simples\Error\NotFoundExceptionInterface;
 use Simples\Error\SimplesRunTimeError;
-use ReflectionClass;
-use ReflectionMethod;
-use ReflectionFunction;
-use ReflectionParameter;
 
 /**
  * Class Container
@@ -161,6 +161,21 @@ class Container
         // created and returns the new instance passing the
         // resolved parameters
         return $reflection->newInstanceArgs($this->resolveParameters($constructor->getParameters(), []));
+    }
+
+    /**
+     * @param mixed $instance
+     * @param string $method
+     * @param array $data
+     * @return mixed
+     */
+    public function execute($instance, string $method, array $data)
+    {
+        // get the parameters
+        $parameters = $this->resolveMethodParameters($instance, $method, $data, true);
+
+        // execute the method
+        return call_user_func_array([$instance, $method], $parameters);
     }
 
     /**

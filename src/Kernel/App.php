@@ -221,6 +221,24 @@ class App
     }
 
     /**
+     * Add a list of middlewares to pipe
+     *
+     * @param array $middlewares
+     * @return $this
+     */
+    public function pipes(array $middlewares): App
+    {
+        foreach ($middlewares as $key => $middleware) {
+            if (is_numeric($key)) {
+                $this->pipe($middleware);
+                continue;
+            }
+            $this->pipe($middleware, $key);
+        }
+        return $this;
+    }
+
+    /**
      * Used to catch http requests and handle response to their
      *
      * @param bool $output (true) Define if the method will generate one output with the response
