@@ -164,18 +164,40 @@ class Container
     }
 
     /**
+     * Checks whether a specific method is defined in a class
+     *
+     * @param mixed $instance
+     * @param string $method
+     * @return bool
+     */
+    public function exists($instance, string $method)
+    {
+        $reflection = new ReflectionClass(get_class($instance));
+
+        return $reflection->hasMethod($method);
+    }
+
+    /**
+     * Invoke a method of an instance of a class
+     *
      * @param mixed $instance
      * @param string $method
      * @param array $data
      * @return mixed
      */
-    public function execute($instance, string $method, array $data)
+    public function invoke($instance, string $method, array $data)
     {
         // get the parameters
         $parameters = $this->resolveMethodParameters($instance, $method, $data, true);
 
+        // get the reflection of method
+        $reflection = new ReflectionMethod(get_class($instance), $method);
+
+        // allow access
+        $reflection->setAccessible(true);
+
         // execute the method
-        return call_user_func_array([$instance, $method], $parameters);
+        return $reflection->invokeArgs($instance, $parameters);
     }
 
     /**
