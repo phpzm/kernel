@@ -173,10 +173,12 @@ class App extends Base
      */
     public function http($output = true)
     {
-        if (!class_exists('\\Simples\\Http\\Kernel\\App')) {
+        $app = '\\Simples\\Http\\Kernel\\App';
+        if (!class_exists($app)) {
             throw new SimplesRunTimeError("App can't handler Http without the package `phpzm/http`");
         }
-        return \Simples\Http\Kernel\App::handle($this->pipe, $output);
+        /** @noinspection PhpUndefinedMethodInspection */
+        return $app::handle($this->pipe, $output);
     }
 
     /**
@@ -187,9 +189,11 @@ class App extends Base
      */
     public function cli(array $service)
     {
-        if (!class_exists('\\Simples\\Console\\Kernel\\App')) {
+        $app = '\\Simples\\Console\\Kernel\\App';
+        if (!class_exists($app)) {
             throw new SimplesRunTimeError("App can't handler Console without the package `phpzm/console`");
         }
-        \Simples\Console\Kernel\App::handle($service);
+        /** @noinspection PhpUndefinedMethodInspection */
+        $app::handle($service);
     }
 }
