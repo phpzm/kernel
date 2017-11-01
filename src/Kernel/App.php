@@ -5,6 +5,8 @@ namespace Simples\Kernel;
 use Simples\Error\SimplesAlreadyRegisteredError;
 use Simples\Error\SimplesRunTimeError;
 use Simples\Helper\File;
+use Simples\Console\Kernel\App as Console;
+use Simples\Http\Kernel\App as Http;
 
 /**
  * Class App
@@ -173,12 +175,11 @@ class App extends Base
      */
     public function http($output = true)
     {
-        $app = '\\Simples\\Http\\Kernel\\App';
-        if (!class_exists($app)) {
+        if (!class_exists('\\Simples\\Http\\Kernel\\App')) {
             throw new SimplesRunTimeError("App can't handler Http without the package `phpzm/http`");
         }
         /** @noinspection PhpUndefinedMethodInspection */
-        return $app::handle($this->pipe, $output);
+        return Http::handle($this->pipe, $output);
     }
 
     /**
@@ -189,11 +190,10 @@ class App extends Base
      */
     public function cli(array $service)
     {
-        $app = '\\Simples\\Console\\Kernel\\App';
-        if (!class_exists($app)) {
+        if (!class_exists('\\Simples\\Console\\Kernel\\App')) {
             throw new SimplesRunTimeError("App can't handler Console without the package `phpzm/console`");
         }
         /** @noinspection PhpUndefinedMethodInspection */
-        $app::handle($service);
+        Console::handle($service);
     }
 }
