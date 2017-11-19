@@ -45,7 +45,7 @@ abstract class Wrapper
      */
     public static function log(...$data)
     {
-        self::message('log', $data, true);
+        self::$messages[] = $data;
     }
 
     /**

@@ -218,6 +218,9 @@ if (!function_exists('stop')) {
     function stop(...$arguments)
     {
         ob_start();
+        if (count($arguments) === 1) {
+            $arguments = $arguments[0];
+        }
         echo json_encode($arguments);
         $contents = ob_get_contents();
         ob_end_clean();
