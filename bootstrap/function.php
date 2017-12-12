@@ -523,3 +523,22 @@ if (!function_exists('type')) {
         return gettype($value) === $type;
     }
 }
+
+/**
+ * @SuppressWarnings("Superglobals")
+ */
+if (!function_exists('getallheaders')) {
+    /**
+     * @return array
+     */
+    function getallheaders()
+    {
+        $headers = [];
+        foreach ($_SERVER as $name => $value) {
+            if (substr($name, 0, 5) == 'HTTP_') {
+                $headers[headerify(substr($name, 5))] = $value;
+            }
+        }
+        return $headers;
+    }
+}
