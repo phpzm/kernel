@@ -145,7 +145,7 @@ class Container
      * @param $className
      * @return mixed
      */
-    protected function makeInstance($className)
+    public function makeInstance($className)
     {
         // class reflection
         $reflection = new ReflectionClass($className);
@@ -246,27 +246,24 @@ class Container
      */
     private function resolveParameters($parameters, $data, $labels = false)
     {
-        $parametersToPass = [];
+        $resolved = [];
 
         /** @var ReflectionParameter $reflectionParameter */
         foreach ($parameters as $reflectionParameter) {
-            if (isset($data[$reflectionParameter->getName()])) {
-                $parametersToPass[] = $this->parseParameter($reflectionParameter, $data, $labels);
+            /** @noinspection PhpAssignmentInConditionInspection */
+            if ($parameterClassName = $this->extractClassName($reflectionParameter)) {
+                $resolved[] = static::make($parameterClassName);
                 continue;
             }
             /** @noinspection PhpAssignmentInConditionInspection */
-            if ($parameterClassName = $this->extractClassName($reflectionParameter)) {
-                $parametersToPass[] = self::make($parameterClassName);
+            if ($parameter = $this->parseParameter($reflectionParameter, $data, $labels)) {
+                $resolved[] = $parameter;
                 continue;
             }
-            if (count($data)) {
-                $parametersToPass[] = $this->parseParameter($reflectionParameter, $data, $labels);
-                continue;
-            }
-            $parametersToPass[] = null;
+            $resolved[] = null;
         }
 
-        return $parametersToPass;
+        return $resolved;
     }
 
     /**
@@ -279,25 +276,29 @@ class Container
      */
     private function parseParameter(ReflectionParameter $reflectionParameter, &$data, $labels)
     {
-        $parameter = null;
+        // get the principal properties
         $name = $reflectionParameter->getName();
-        $default = null;
+        $value = null;
         if ($reflectionParameter->isOptional()) {
-            $default = $reflectionParameter->getDefaultValue();
+            $value = $reflectionParameter->getDefaultValue();
         }
-        if ($labels && isset($data[$name])) {
-            $parameter = $data[$name];
-            unset($data[$name]);
+
+        // parse data using labels
+        if ($labels) {
+            if (isset($data[$name])) {
+                $value = off($data, $name, $value);
+                unset($data[$name]);
+            }
+            return $value;
         }
-        if (!$parameter && isset($data[0])) {
-            $parameter = $data[0];
+
+        // parse data without labels
+        if (isset($data[0])) {
+            $value = $data[0];
             array_shift($data);
             reset($data);
         }
-        if (!$parameter && isset($default)) {
-            $parameter = $default;
-        }
-        return $parameter;
+        return $value;
     }
 
     /**

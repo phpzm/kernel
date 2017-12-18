@@ -330,6 +330,37 @@ if (!function_exists('error_format')) {
     }
 }
 
+if (!function_exists('error_message')) {
+    /**
+     * @param Throwable $error
+     * @return array
+     */
+    function error_message(Throwable $error): string
+    {
+        $pieces = [];
+        $line = function ($message, $file, $line) {
+            $file = str_replace(dirname(__DIR__, 4), '', $file);
+            return $message . ' on ' . $file . ' in ' . $line;
+        };
+
+        $pieces[] = $line($error->getMessage(), $error->getFile(), $error->getLine());
+
+        if (method_exists($error, 'getDetails')) {
+            $pieces[] = '~';
+            $pieces[] = json_encode($error->getDetails(), JSON_PRETTY_PRINT);
+        }
+        if (is_array($error->getTrace())) {
+            $pieces[] = '~';
+            foreach ($error->getTrace() as $item) {
+                $class = off('class');
+                $function = $item['function'];
+                $pieces[] = $line("`{$class}::{$function}`", off('file'), off('line'));
+            }
+        }
+        return implode(PHP_EOL, $pieces);
+    }
+}
+
 if (!function_exists('is_last_caller')) {
     /**
      * @param string $class
@@ -521,24 +552,5 @@ if (!function_exists('type')) {
     function type($value, string $type)
     {
         return gettype($value) === $type;
-    }
-}
-
-/**
- * @SuppressWarnings("Superglobals")
- */
-if (!function_exists('getallheaders')) {
-    /**
-     * @return array
-     */
-    function getallheaders()
-    {
-        $headers = [];
-        foreach ($_SERVER as $name => $value) {
-            if (substr($name, 0, 5) == 'HTTP_') {
-                $headers[headerify(substr($name, 5))] = $value;
-            }
-        }
-        return $headers;
     }
 }
