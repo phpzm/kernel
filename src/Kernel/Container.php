@@ -8,6 +8,7 @@ use ReflectionMethod;
 use ReflectionParameter;
 use Simples\Error\NotFoundExceptionInterface;
 use Simples\Error\SimplesRunTimeError;
+use function is_null;
 
 /**
  * Class Container
@@ -144,6 +145,7 @@ class Container
      *
      * @param $className
      * @return mixed
+     * @throws SimplesRunTimeError
      */
     public function makeInstance($className)
     {
@@ -184,6 +186,7 @@ class Container
      * @param string $method
      * @param array $data
      * @return mixed
+     * @throws SimplesRunTimeError
      */
     public function invoke($instance, string $method, array $data)
     {
@@ -208,6 +211,7 @@ class Container
      * @param $parameters
      * @param bool $labels
      * @return array
+     * @throws SimplesRunTimeError
      */
     public function resolveMethodParameters($instance, $method, $parameters, $labels = false)
     {
@@ -225,6 +229,7 @@ class Container
      * @param $parameters
      * @param bool $labels
      * @return array
+     * @throws SimplesRunTimeError
      */
     public function resolveFunctionParameters($callable, $parameters, $labels = false)
     {
@@ -242,27 +247,26 @@ class Container
      * @param $data
      * @param bool $labels
      * @return array
-     *
+     * @throws SimplesRunTimeError
      */
     private function resolveParameters($parameters, $data, $labels = false)
     {
         $resolved = [];
-
         /** @var ReflectionParameter $reflectionParameter */
         foreach ($parameters as $reflectionParameter) {
+            /** @noinspection PhpAssignmentInConditionInspection */
+            $parameter = $this->parseParameter($reflectionParameter, $data, $labels);
+            if (!is_null($parameter)) {
+                $resolved[] = $parameter;
+                continue;
+            }
             /** @noinspection PhpAssignmentInConditionInspection */
             if ($parameterClassName = $this->extractClassName($reflectionParameter)) {
                 $resolved[] = static::make($parameterClassName);
                 continue;
             }
-            /** @noinspection PhpAssignmentInConditionInspection */
-            if ($parameter = $this->parseParameter($reflectionParameter, $data, $labels)) {
-                $resolved[] = $parameter;
-                continue;
-            }
             $resolved[] = null;
         }
-
         return $resolved;
     }
 
