@@ -574,3 +574,25 @@ if (!function_exists('getallheaders')) {
     }
 }
 
+if (!function_exists('runnable')) {
+    /**
+     * @param mixed $reference
+     * @param string $method
+     * @return callable
+     * @throws SimplesRunTimeError
+     */
+    function runnable($reference, $method = null)
+    {
+        $runnable = [$reference, $method];
+        if (is_string($reference)) {
+            $runnable = "{$reference}::{$method}";
+        }
+        if (!is_callable($runnable)) {
+            throw new SimplesRunTimeError("Can't resolve callable to parameters", [
+                'reference' => $reference,
+                'method' => $method,
+            ]);
+        }
+        return $runnable;
+    }
+}
