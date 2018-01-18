@@ -175,7 +175,6 @@ if (!function_exists('coalesce')) {
                 return $argument;
             }
         }
-        // TODO: use locale
         throw new SimplesRunTimeError("Can't resolve coalesce options", $arguments);
     }
 }
@@ -333,7 +332,7 @@ if (!function_exists('error_format')) {
 if (!function_exists('error_message')) {
     /**
      * @param Throwable $error
-     * @return array
+     * @return string
      */
     function error_message(Throwable $error): string
     {
@@ -594,5 +593,15 @@ if (!function_exists('runnable')) {
             ]);
         }
         return $runnable;
+    }
+}
+
+if (!function_exists('concat')) {
+    /**
+     * @return string
+     */
+    function concat()
+    {
+        return implode(' ', func_get_args());
     }
 }
