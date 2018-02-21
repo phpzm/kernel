@@ -175,6 +175,7 @@ if (!function_exists('coalesce')) {
                 return $argument;
             }
         }
+        // TODO: use locale
         throw new SimplesRunTimeError("Can't resolve coalesce options", $arguments);
     }
 }

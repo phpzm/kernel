@@ -8,7 +8,6 @@ use ReflectionMethod;
 use ReflectionParameter;
 use Simples\Error\NotFoundExceptionInterface;
 use Simples\Error\SimplesRunTimeError;
-use function is_null;
 
 /**
  * Class Container
